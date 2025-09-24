@@ -2,7 +2,8 @@ from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import FileResponse, HTMLResponse
 import requests
 import tempfile
-import fitz
+import io
+import pdfplumber
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 import os
@@ -58,9 +59,8 @@ def query_huggingface(question: str, context: str, max_retries=3):
     return ""
 
 def extract_text_from_pdf_bytes(pdf_bytes: bytes):
-    pdf = fitz.open(stream=pdf_bytes, filetype="pdf")
-    text = "\n".join([page.get_text() for page in pdf])
-    pdf.close()
+    with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
+        text = "\n".join([page.extract_text() or "" for page in pdf.pages])
     return text
 
 def extract_questions(pdf_bytes: bytes):
