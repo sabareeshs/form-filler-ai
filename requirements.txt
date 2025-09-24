@@ -1,7 +1,6 @@
-fastapi
-uvicorn
-transformers
-torch
-PyMuPDF
-reportlab
-
+fastapi==0.104.1
+uvicorn==0.24.0
+PyMuPDF==1.23.0
+reportlab==4.0.4
+requests==2.31.0
+python-multipart==0.0.6
